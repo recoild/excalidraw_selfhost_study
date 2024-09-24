@@ -160,9 +160,3 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 
 ---
 
-
-- 위의 과정은 https://yarn.build/ 링크의 yarn 플러그인으로 좀 더 최적화가 가능하므로 추후 구현해봅니다.
-
-## TODO
-
-- [ ] yarn 플러그인으로 최적화 구현
