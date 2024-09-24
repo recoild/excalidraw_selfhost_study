@@ -52,7 +52,10 @@
   </figure>
 </div>
 
-
+## 실행 명령어
+```
+docker build -t myexcalidraw:0.1 .
+```
 
 ## Dockerfile 최적화 실습
 ### 주요 변경 사항
@@ -66,6 +69,7 @@
 0.2 -> nginx alpine slim 버전 사용
 
 총 30MB 최적화
+
 ![이미지크기최적화](images/size_optimize.png)
 
 
