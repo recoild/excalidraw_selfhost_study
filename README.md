@@ -103,11 +103,15 @@ COPY --from=build /opt/node_app/excalidraw-app/build /usr/share/nginx/html
 HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 ```
 
-결과:129초
-
 ![코드최적화1](images/code_opt_before.png)
 
-- 최적화 after: 설치 파일만 먼저 복사하고 설치한 후 나머지 코드를 복사하여 빌드를 수행하도록 Dockerfile을 변경했습니다. 이렇게 하면 코드 변경이 있을 때만 마지막 부분부터 새로운 레이어로 빌드가 수행됩니다.
+❗ 결과:129초
+
+---
+
+
+- 최적화 after: 설치 파일만 먼저 복사하고 설치한 후 나머지 코드를 복사하여 빌드를 수행하도록 Dockerfile을 변경했습니다.
+- 코드 변경이 있을 때만 마지막 부분부터 새로운 레이어로 빌드가 수행됩니다.
 
 ```
 # Stage 1: Build
@@ -149,9 +153,14 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 
 ```
 
-결과: 36초
 
 ![코드최적화1](images/code_opt_after.png)
+
+
+❗ 결과: 36초
+
+---
+
 
 - 위의 과정은 https://yarn.build/ 링크의 yarn 플러그인으로 좀 더 최적화가 가능하므로 추후 구현해봅니다.
 
