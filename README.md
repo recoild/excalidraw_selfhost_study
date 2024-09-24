@@ -60,8 +60,6 @@ docker build -t myexcalidraw:0.1 .
 
 ## Dockerfile 최적화 실습
 
-### 주요 변경 사항
-
 - nginx 이미지 slim으로 변경.
 - Dockerfile 캐시 레이어 최적화.
 
@@ -69,9 +67,9 @@ docker build -t myexcalidraw:0.1 .
 
 ### 이미지 크기 최적화
 
-0.1 -> nginx alpine 버전 사용
+tag 0.1 -> nginx alpine 버전 사용
 
-0.2 -> nginx alpine slim 버전 사용
+tag 0.2 -> nginx alpine slim 버전 사용
 
 총 30MB 최적화
 
