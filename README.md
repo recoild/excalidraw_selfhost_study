@@ -61,8 +61,11 @@
 ## 결과
 ### 이미지 크기 최적화
 
-0.1 -> nginx alpine버전 사용
+0.1 -> nginx alpine 버전 사용
+
 0.2 -> nginx alpine slim 버전 사용
+
+총 30MB 최적화
 ![이미지크기최적화](images/size_optimize.png)
 
 
