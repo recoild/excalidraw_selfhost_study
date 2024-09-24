@@ -157,4 +157,4 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 
 ## TODO
 
-[ ] yarn 플러그인으로 최적화 구현
+- [ ] yarn 플러그인으로 최적화 구현
