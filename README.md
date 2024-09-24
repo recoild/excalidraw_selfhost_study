@@ -53,15 +53,20 @@
 </div>
 
 ## 실행 명령어
+
 ```
 docker build -t myexcalidraw:0.1 .
 ```
 
 ## Dockerfile 최적화 실습
+
 ### 주요 변경 사항
+
 - nginx 이미지 slim으로 변경.
+- Dockerfile 캐시 레이어 최적화.
 
 ## 결과
+
 ### 이미지 크기 최적화
 
 0.1 -> nginx alpine 버전 사용
@@ -72,4 +77,82 @@ docker build -t myexcalidraw:0.1 .
 
 ![이미지크기최적화](images/size_optimize.png)
 
+### 캐시 레이어 최적화
 
+기존 코드에서는 모든 코드를 복사 붙여넣기를 수행.
+
+그러므로, 코드 한 글자를 변경하게 되더라도 3번 째 줄 부터 새로운 레이어로 빌드 수행.
+
+```
+FROM node:18 AS build
+
+WORKDIR /opt/node_app
+
+COPY . .
+
+# do not ignore optional dependencies:
+# Error: Cannot find module @rollup/rollup-linux-x64-gnu
+RUN yarn --network-timeout 600000
+
+ARG NODE_ENV=production
+
+RUN yarn build:app:docker
+
+FROM nginx:1.27-alpine-slim
+
+COPY --from=build /opt/node_app/excalidraw-app/build /usr/share/nginx/html
+
+HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
+```
+
+결과:129초
+
+![코드최적화1](images/code_opt_before.png)
+
+기존 코드에서 오래 걸리는 설치 작업이 캐시 될 수 있도록 설치 파일들만 먼저 복사 붙여넣기하여 설치 수행.
+
+이후 기존 코드가 변경됐을때만 코드 빌드 수행되도록하면 코드 맨 마지막부터 새로운 레이어로 빌드 수행.
+
+```
+# Stage 1: Build
+FROM node:18 AS build
+
+WORKDIR /opt/node_app
+
+# Copy root package.json and yarn.lock
+COPY package.json yarn.lock ./
+
+# Copy workspace package.json files
+COPY excalidraw-app/package.json excalidraw-app/
+COPY packages/excalidraw/package.json packages/excalidraw/
+COPY packages/utils/package.json packages/utils/
+COPY packages/math/package.json packages/math/
+# Add other workspaces as needed
+
+# Install dependencies
+RUN yarn install --frozen-lockfile --network-timeout 600000
+
+# Copy the rest of the source code
+COPY . .
+
+# Set build environment variable
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+# Build the application
+RUN yarn build:app:docker
+
+# Stage 2: Production Image
+FROM nginx:1.27-alpine-slim
+
+# Copy built assets to Nginx
+COPY --from=build /opt/node_app/excalidraw-app/build /usr/share/nginx/html
+
+# Healthcheck
+HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
+
+```
+
+결과: 36초
+
+![코드최적화1](images/code_opt_after.png)
