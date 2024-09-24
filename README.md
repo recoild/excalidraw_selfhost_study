@@ -157,4 +157,4 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 
 ## TODO
 
-<input disabled="" type="checkbox"> yarn 플러그인으로 최적화 구현
+[ ] yarn 플러그인으로 최적화 구현
