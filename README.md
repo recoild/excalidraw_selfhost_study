@@ -108,9 +108,9 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
 ---
 
 
-- 최적화 after: 설치 파일만 먼저 복사하고 설치한 후 나머지 코드를 복사하여 빌드를 수행하도록 Dockerfile을 변경했습니다.
+- 최적화 after: package.json, yarn.lock 파일들을 먼저 복사하고 설치한 후 나머지 코드를 복사하여 빌드를 수행하도록 Dockerfile을 변경했습니다.
 - 코드 변경이 있을 때만 마지막 부분부터 새로운 레이어로 빌드가 수행됩니다.
-- 현재 프로젝트에서는 모노레포 방식으로 구축되어 있기 때문에 각 프로젝트마다 package.json을 설치해야합니다.
+- 현재 프로젝트는 모노레포 방식으로 구축되어 있기 때문에 각 프로젝트마다 package.json을 설치해야합니다.
 
 ```
 # Stage 1: Build
